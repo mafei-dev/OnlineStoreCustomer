@@ -9,19 +9,40 @@ namespace Customer.Service
     {
         DB_Entities objEntity = new DB_Entities();
 
-        public List<ItemViewDTO> GetItemForView()
+        public List<ItemViewDTO> GetItemForView(string categoryId)
         {
-            return objEntity.Items.Join(
-                objEntity.ItemCategories,
-                item => item.categoryId,
-                category => category.categoryId,
-                (item, category) => new ItemViewDTO
-                {
-                    itemCode = item.itemCode,
-                    name = item.name,
-                    categoryName = category.name,
-                }
-            ).Take(10).ToList();
+            if (categoryId.Equals("0"))
+            {
+                return objEntity.Items.Join(
+                    objEntity.ItemCategories,
+                    item => item.categoryId,
+                    category => category.categoryId,
+                    (item, category) => new ItemViewDTO
+                    {
+                        itemCode = item.itemCode,
+                        name = item.name,
+                        unitPrice = item.unitPrice,
+                        categoryName = category.name,
+                        categoryId =category.categoryId
+                    }
+                ).Take(10).ToList();
+            }
+            else
+            {
+                return objEntity.Items.Join(
+                    objEntity.ItemCategories,
+                    item => item.categoryId,
+                    category => category.categoryId,
+                    (item, category) => new ItemViewDTO
+                    {
+                        itemCode = item.itemCode,
+                        name = item.name,
+                        unitPrice = item.unitPrice,
+                        categoryName = category.name,
+                        categoryId =category.categoryId
+                    }
+                ).Where(dto => dto.categoryId == categoryId).Take(10).ToList();
+            }
         }
     }
 }

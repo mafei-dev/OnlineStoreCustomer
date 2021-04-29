@@ -6,27 +6,38 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using Customer.Dto;
+using Customer.Service;
 
 namespace Customer.Controllers
 {
-
     [RoutePrefix("api/customer")]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://localhost:4200", headers: "accept,content-type,origin,x-my-header", methods: "*")]
     public class CustomerController : ApiController
     {
-        DB_Entities _dbEntities = new DB_Entities();
-         
+        CustomerService _customerService = new CustomerService();
+
         [HttpGet]
-        [Route("all")]
-        public IEnumerable<string> Get()
+        [Route("detail")]
+        public CustomerView GetDetails(String customerId)
         {
-            string id = Guid.NewGuid().ToString();
-            ItemCategory item = new ItemCategory();
-            item.categoryId = id;
-            item.name = "name";
-            _dbEntities.ItemCategories.Add(item);
-            _dbEntities.SaveChanges();
-            return new string[] { "value1", "value2" };
+            return _customerService.GetDetails(customerId);
         }
+
+        [HttpPost]
+        [Route("reg")]
+        public Boolean Register(CustomerRegDTO customerRegDto)
+        {
+            return _customerService.Register(customerRegDto);
+        }
+        
+        [HttpPost]
+        [Route("login")]
+        public CustomerBasicDetail Login(CustomerLoginDTO customerRegDto)
+        {
+            return _customerService.Login(customerRegDto);
+        }
+        
+        
     }
 }

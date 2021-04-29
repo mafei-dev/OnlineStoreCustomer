@@ -6,9 +6,9 @@ namespace Customer.Dto
     {
         public string itemCode { get; set; }
         public string name { get; set; }
-        public decimal unitPrice { get; set; }
+        public Nullable<decimal> unitPrice { get; set; }
         public int itemQty { get; set; }
-        public int categoryId { get; set; }
+        public string categoryId { get; set; }
         public byte[] itemImage { get; set; }
     }
 
